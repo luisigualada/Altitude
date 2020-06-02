@@ -1,0 +1,120 @@
+<html>
+<head>
+      <!-- Imports Open CTI JavaScript library. It should point to a valid Salesforce domain. -->
+<script type="text/javascript" src="https://altcti-dev-ed.lightning.force.com/support/api/48.0/lightning/opencti_min.js"></script> 
+<script type="text/javascript">
+             // Callback of API method: isInConsole
+             var isInConsoleCallback = function (response) {
+                  // Returns true if method is executed in Service Cloud console, false otherwise.
+                  if (response.result) {
+                      alert('SoftPhone is in Service Cloud console.');
+                  } else {
+                      alert('SoftPhone is not in Service Cloud console.');
+                  }
+              };
+              // Invokes API method: isInConsole
+              function isInConsole() {
+                       sforce.interaction.isInConsole(isInConsoleCallback);
+              }
+              // Callback of API method: getCallCenterSettings
+              var getCallCenterSettingsCallback = function (response) {
+                     // Result returns call center settings as a JSON string.
+                     if (response.result) {
+                            alert(response.result);
+                     } else {
+                            alert('Error retrieving call center settings ' + response.error);
+                     }
+               };
+               // Invokes API method: getCallCenterSettings
+               function getCallCenterSettings() {
+                        sforce.interaction.cti.getCallCenterSettings(getCallCenterSettingsCallback);
+               }
+               // Callback of API method: setSoftphoneHeight
+               var setSoftphoneHeightCallback = function (response) {
+                        // Returns true if SoftPhone height was set successfully, false otherwise.
+               if (response.result) {
+                       alert('Setting SoftPhone height to 300px was successful.');
+               } else {
+                      alert('Setting softphone height failed.');
+               }
+               };
+               // Invokes setSoftphoneHeight API method.
+               function setSoftphoneHeight() {
+                       sforce.interaction.cti.setSoftphoneHeight(300, setSoftphoneHeightCallback);
+               }
+               // Callback of API method: getPageInfo
+               var getPageInfoCallback = function (response) {
+                      if (response.result) {
+                             alert(response.result);
+                      } else {
+                             alert('Error occured while trying to get page info: ' + response.error);
+                      }
+               }
+               // Invokes API method getPageInfo
+               function getPageInfo() {
+                       sforce.interaction.getPageInfo(getPageInfoCallback);
+               }
+				var listener = function (response) {
+					if (response.result) {
+						alert('User clicked on a phone number.' + response.result );
+					}
+				};
+				var callbackPOP = function (response) {
+				   if (response.result) {
+					  alert('Screen pop was set successfully.');
+				   }
+				   else {
+					  alert('Screen pop failed.' + result.error);
+				   }
+				};
+			   function screenPop() {
+						//Invokes API method to pop for a related account
+						sforce.interaction.screenPop('/001R000000lyzNn', callbackPOP);
+				}
+var callbackenable = function (response) {
+           if (response.result) {
+              alert('Click to dial was enabled.');
+           } else { 
+              alert('Click to dial was not enabled.');
+           } 
+        };
+        function enableClickToDial() {
+   //Invokes API method
+   sforce.interaction.cti.enableClickToDial(callbackenable);
+   }			
+	var callbackdisable = function (response) {
+		if (response.result) {
+			alert('Click to dial was disabled.');
+		} else { 
+			alert('Click to dial was not disabled.');
+		} 
+	};
+	function disableClickToDial() {
+	   //Invokes API method
+	   sforce.interaction.cti.disableClickToDial(callbackdisable);
+   }   
+	var callbackLayout = function (response) {
+               alert(response.result);
+           } 
+		var callbackSearch = function (response) {
+           if (response.result) {
+                  alert(response.result);
+            } else {
+                   alert(response.error);
+           }
+        };
+   function searchAndScreenPop() {
+			//Invokes API method
+			sforce.interaction.searchAndScreenPop('626160219', 'Key1=value1&Key2=value2', 'inbound', callbackSearch);
+	}		   
+   //Invokes API method
+   sforce.interaction.cti.onClickToDial(listener);			   
+      </script>
+</head>
+<body>
+	<button onclick="screenPop();">screen pop to entity Id</button><br>
+	<button onclick="enableClickToDial();">enable click to dial</button><br>
+	<button onclick="disableClickToDial();">disable click to dial</button><br>
+	<button onclick="searchAndScreenPop();">searchAndScreenPop</button>
+</body>
+</html>
